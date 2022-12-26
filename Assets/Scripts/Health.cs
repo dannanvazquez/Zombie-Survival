@@ -1,7 +1,5 @@
-using Mirror;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public class Health : MonoBehaviour {
     [SerializeField] private int maxHealth = 100;

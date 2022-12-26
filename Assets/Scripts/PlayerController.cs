@@ -19,7 +19,7 @@ public class PlayerController : NetworkBehaviour {
     float rotationX = 0;
     [HideInInspector] public bool canMove = true;
 
-    void Start() {
+    private void Start() {
         characterController = GetComponent<CharacterController>();
 
         if (!isLocalPlayer) return;
@@ -39,7 +39,7 @@ public class PlayerController : NetworkBehaviour {
         playerCamera.gameObject.SetActive(true);
     }
 
-    void Update() {
+    private void Update() {
         if (!isLocalPlayer) return;
 
         // Press escape key to "pause" and "unpause" the game

@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+[RequireComponent(typeof(PlayerController))]
 public class WeaponController : NetworkBehaviour {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnTrans;
@@ -18,7 +18,7 @@ public class WeaponController : NetworkBehaviour {
         playerController = GetComponent<PlayerController>();
     }
 
-    void Update()
+    private void Update()
     {
         if (!isLocalPlayer) return;
 

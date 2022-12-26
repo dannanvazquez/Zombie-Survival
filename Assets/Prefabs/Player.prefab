@@ -350,7 +350,7 @@ MonoBehaviour:
   shootCooldown: 1
   bulletSpeed: 50
   maxDistance: 25
-  bulletDamage: 10
+  bulletDamage: 25
 --- !u!114 &-5584478926983404755
 MonoBehaviour:
   m_ObjectHideFlags: 0
