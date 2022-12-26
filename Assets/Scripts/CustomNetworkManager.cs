@@ -17,5 +17,8 @@ public class CustomNetworkManager : NetworkManager {
         player.GetComponent<PlayerController>().playerName = $"Player_{numPlayers + 1}";
         NetworkServer.AddPlayerForConnection(conn, player);
         players.Add(player);
+        if (players.Count == GameManager.Instance.minPlayers) {
+            GameManager.Instance.StartGame();
+        }
     }
 }

@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 6618767163823441649}
   - component: {fileID: 3838888830613132919}
   - component: {fileID: 6310016989458459592}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 7323978533539336952}
   - component: {fileID: 2153941888328414757}
   - component: {fileID: 3810905600667742090}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
