@@ -18,8 +18,7 @@ public class WeaponController : NetworkBehaviour {
         playerController = GetComponent<PlayerController>();
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (!isLocalPlayer) return;
 
         // Shoot when the player presses the Fire1 button.
@@ -65,6 +64,6 @@ public class WeaponController : NetworkBehaviour {
     IEnumerator ShootHitEnemy(RaycastHit _hit) {
         float travelTime = Vector3.Distance(transform.position, _hit.point) / bulletSpeed;
         yield return new WaitForSeconds(travelTime);
-        _hit.transform.GetComponent<Health>().TakeDamage(bulletDamage);
+        _hit.transform.GetComponent<Health>().TakeDamage(bulletDamage, playerController);
     }
 }

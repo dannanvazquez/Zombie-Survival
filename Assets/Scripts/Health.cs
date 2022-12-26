@@ -9,10 +9,12 @@ public class Health : MonoBehaviour {
         currentHealth = maxHealth;
     }
 
-    // How much damage to deal and destroy self when below 0 health.
-    public void TakeDamage(int damage) {
+    // How much damage to deal and destroy self when below 0 health. Gives player gold based on damage and increases kill count if killed.
+    public void TakeDamage(int damage, PlayerController player = null) {
+        if (player != null) player.gold += damage;
         currentHealth -= damage;
         if (currentHealth <= 0) {
+            if (player != null) player.kills++;
             NetworkServer.Destroy(gameObject);
         }
     }

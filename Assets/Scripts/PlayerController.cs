@@ -4,6 +4,9 @@ using Mirror;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour {
     public string playerName = "Player";
+    public int kills = 0;
+    public int gold = 0;
+
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
