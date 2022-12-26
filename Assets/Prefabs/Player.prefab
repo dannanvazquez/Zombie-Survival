@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2337840711348551532}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 1858071936399684917}
   - component: {fileID: 1372799506911488613}
   - component: {fileID: 2145891324181754458}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 1320182174570421311}
   - component: {fileID: 749598176821552411}
   - component: {fileID: 9096866279522502451}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +237,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6786540475558568921}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: BulletSpawnLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 3582168482314094757}
   - component: {fileID: 6615813143740768247}
   - component: {fileID: 1735418437319079475}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -320,6 +320,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   playerName: Player
+  kills: 0
+  gold: 0
   walkingSpeed: 5
   runningSpeed: 7.5
   jumpSpeed: 8
@@ -559,7 +561,7 @@ GameObject:
   - component: {fileID: 7347206818698249947}
   - component: {fileID: 7347206818698249946}
   - component: {fileID: 7347206818698249509}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +679,7 @@ GameObject:
   - component: {fileID: 7347206819030567042}
   - component: {fileID: 7347206819030567053}
   - component: {fileID: 7347206819030567052}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
