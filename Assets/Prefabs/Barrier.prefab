@@ -274,8 +274,9 @@ GameObject:
   - component: {fileID: 6618767163823441649}
   - component: {fileID: 3838888830613132919}
   - component: {fileID: 6310016989458459592}
+  - component: {fileID: 5377086633212800355}
   m_Layer: 2
-  m_Name: Trigger
+  m_Name: Repair Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,6 +318,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5377086633212800355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786802867195700089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945c4032b8e6cc940a155976ef3cb3ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1982321572915833852
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +564,7 @@ MonoBehaviour:
   - {fileID: 1119075456982296763}
   activeBarriers: 6
   breakCooldown: 2
+  repairCooldown: 2
 --- !u!65 &2153941888328414757
 BoxCollider:
   m_ObjectHideFlags: 0

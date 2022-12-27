@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(SpawnEnemies());
     }
 
+    // Spawns enemies at random spawns and once spawnIntervals is over, continue looping.
     IEnumerator SpawnEnemies() {
         for (int i = 0; i < spawnsPerInterval; i++) {
             GameObject zombie = Instantiate(zombiePrefab, enemySpawnPoints[Random.Range(0, enemySpawnPoints.Count)].position, Quaternion.identity);

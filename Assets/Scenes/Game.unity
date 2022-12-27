@@ -1560,7 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda17f086ca65aa49ba7cdcbc3300af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minPlayers: 1
+  minPlayers: 2
   zombiePrefab: {fileID: 2476933066427013539, guid: 7a6afcf4ccf55d149ac05b11270b74ee,
     type: 3}
   enemySpawnPoints:
@@ -1568,7 +1568,7 @@ MonoBehaviour:
   - {fileID: 1407366010}
   - {fileID: 651124941}
   - {fileID: 728218594}
-  spawnIntervals: 10
+  spawnIntervals: 15
   spawnsPerInterval: 2
 --- !u!1 &273195891
 GameObject:
@@ -3981,6 +3981,11 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneId
       value: 2013823449
+      objectReference: {fileID: 0}
+    - target: {fileID: 2858984677204622242, guid: 047e5875e596ae7479868b01c2504b8b,
+        type: 3}
+      propertyPath: sceneId
+      value: 1775236451
       objectReference: {fileID: 0}
     - target: {fileID: 3044694596283200300, guid: 047e5875e596ae7479868b01c2504b8b,
         type: 3}
@@ -6643,6 +6648,11 @@ PrefabInstance:
       propertyPath: sceneId
       value: 1234631328
       objectReference: {fileID: 0}
+    - target: {fileID: 2858984677204622242, guid: 047e5875e596ae7479868b01c2504b8b,
+        type: 3}
+      propertyPath: sceneId
+      value: 308529680
+      objectReference: {fileID: 0}
     - target: {fileID: 3044694596283200300, guid: 047e5875e596ae7479868b01c2504b8b,
         type: 3}
       propertyPath: m_Name
@@ -8044,6 +8054,11 @@ PrefabInstance:
       propertyPath: sceneId
       value: 2865435791
       objectReference: {fileID: 0}
+    - target: {fileID: 2858984677204622242, guid: 047e5875e596ae7479868b01c2504b8b,
+        type: 3}
+      propertyPath: sceneId
+      value: 2757940415
+      objectReference: {fileID: 0}
     - target: {fileID: 3044694596283200300, guid: 047e5875e596ae7479868b01c2504b8b,
         type: 3}
       propertyPath: m_Name
@@ -8907,6 +8922,11 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneId
       value: 3313308711
+      objectReference: {fileID: 0}
+    - target: {fileID: 2858984677204622242, guid: 047e5875e596ae7479868b01c2504b8b,
+        type: 3}
+      propertyPath: sceneId
+      value: 703873620
       objectReference: {fileID: 0}
     - target: {fileID: 3044694596283200300, guid: 047e5875e596ae7479868b01c2504b8b,
         type: 3}
