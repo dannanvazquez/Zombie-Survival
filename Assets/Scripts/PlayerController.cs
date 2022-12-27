@@ -50,10 +50,12 @@ public class PlayerController : NetworkBehaviour {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (canMove) {
                 canMove = false;
+                GetComponent<CharacterController>().enabled = false;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             } else {
                 canMove = true;
+                GetComponent<CharacterController>().enabled = true;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
@@ -105,5 +107,12 @@ public class PlayerController : NetworkBehaviour {
     private void CmdIsInteracting(bool interacting) {
         if (interacting) isInteracting = true;
         else isInteracting = false;
+    }
+
+    // Let all clients know if the player can now move or no longer move.
+    [ClientRpc]
+    public void RpcCanMove(bool _canMove) {
+        GetComponent<PlayerController>().canMove = _canMove;
+        GetComponent<CharacterController>().enabled = _canMove;
     }
 }
