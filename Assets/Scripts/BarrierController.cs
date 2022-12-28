@@ -42,6 +42,16 @@ public class BarrierController : NetworkBehaviour {
         RpcEnableBarrier(barriers.Count - activeBarriers - 1);
         activeBarriers++;
         repairTimer = repairCooldown;
+        if (activeBarriers == barriers.Count) ToggleBarrierUI(player, false);
+    }
+
+    // Toggle the interact UI for the specified client.
+    public void ToggleBarrierUI(PlayerController player, bool toggle) {
+        if (toggle) {
+            UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, "Hold E to repair");
+        } else {
+            UIManager.Instance.TargetDisableInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient);
+        }
     }
 
     // Enable the barrier on all clients

@@ -15,7 +15,10 @@ public class Health : NetworkBehaviour {
     public void TakeDamage(int damage, PlayerController killedByPlayer = null) {
         if (currentHealth == 0) return;
         if (currentHealth - damage < 0) damage = currentHealth;
-        if (killedByPlayer != null) killedByPlayer.gold += damage;
+        if (killedByPlayer != null) {
+            killedByPlayer.gold += damage;
+            UIManager.Instance.TargetGoldUI(killedByPlayer.GetComponent<PlayerController>().connectionToClient, killedByPlayer.gold);
+        }
 
         currentHealth -= damage;
 

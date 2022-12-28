@@ -50,12 +50,10 @@ public class PlayerController : NetworkBehaviour {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (canMove) {
                 canMove = false;
-                GetComponent<CharacterController>().enabled = false;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             } else {
                 canMove = true;
-                GetComponent<CharacterController>().enabled = true;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
@@ -90,7 +88,7 @@ public class PlayerController : NetworkBehaviour {
         }
 
         // Move the controller
-        characterController.Move(moveDirection * Time.deltaTime);
+        if (characterController.enabled) characterController.Move(moveDirection * Time.deltaTime);
 
         // Player and Camera rotation
         if (canMove) {
