@@ -4,14 +4,10 @@ using Mirror;
 
 [RequireComponent(typeof(PlayerController))]
 public class WeaponController : NetworkBehaviour {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawnTrans;
-    [SerializeField] private float shootCooldown = 1f;
-    [SerializeField] private float bulletSpeed = 30f;
-    [SerializeField] private float maxDistance = 25f;
-    [SerializeField] private int bulletDamage = 10;
+    [SerializeField] private GameObject[] weapons;
+    private int holdingWeapon = 1;
 
-    private bool canShoot = true;
+    private bool canAttack = true;
     private PlayerController playerController;
 
     private void Start() {
@@ -22,49 +18,51 @@ public class WeaponController : NetworkBehaviour {
         if (!isLocalPlayer) return;
 
         // Shoot when the player presses the Fire1 button.
-        if (Input.GetButton("Fire1") && canShoot && playerController.canMove) {
-            canShoot = false;
-            CmdShoot();
-            StartCoroutine(StartCooldown());
+        if (canAttack && playerController.canMove) {
+            if (weapons[holdingWeapon].GetComponent<MeleeWeapon>()) {
+                if (Input.GetButtonDown("Fire1")) {
+                    canAttack = false;
+                    CmdHit();
+                    StartCoroutine(StartCooldown());
+                }
+            } else {
+                if (Input.GetButton("Fire1")) {
+                    canAttack = false;
+                    CmdHit();
+                    StartCoroutine(StartCooldown());
+                }
+            }
         }
+
+        // Switch weapons
+        if (Input.GetKeyDown(KeyCode.Alpha1) && weapons[0] != null) CmdSwitchWeapon(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2) && weapons[1] != null) CmdSwitchWeapon(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3) && weapons[2] != null) CmdSwitchWeapon(2);
     }
 
-    // Player has commanded to shoot.
-    // TODO: Check with the server if the player is allowed to shoot.
+    // Tell the server the player wants to hit
     [Command]
-    private void CmdShoot() {
-        // Checks if player is looking at an object within maxDistance and set its endPos at the hit object. If there is no object in sight, end bullet at maxDistance.
-        Vector3 endPos;
-        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast");
-        mask &= ~(1 << 3);
-        if (Physics.Raycast(playerController.playerCamera.gameObject.transform.position, playerController.playerCamera.gameObject.transform.TransformDirection(Vector3.forward), out RaycastHit hit, maxDistance, mask)) {
-            endPos = hit.point;
-            // If the hit object has health, be prepared to deal damage to it.
-            if (hit.transform.GetComponent<Health>()) {
-                StartCoroutine(ShootHitEnemy(hit));
-            }
-        } else {
-            endPos = gameObject.GetComponent<PlayerController>().playerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, maxDistance));
-        }
+    private void CmdHit() {
+        weapons[holdingWeapon].GetComponent<Weapon>().Attack();
+    }
 
-        // Instantiate the bullet across the server. Starting at bulletSpawnTrans's position and move towards endPos.
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnTrans.position, bulletSpawnTrans.rotation);
-        bullet.transform.LookAt(endPos);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * bulletSpeed;
-        Destroy(bullet, Vector3.Distance(transform.position, endPos) / bulletSpeed);
-        NetworkServer.Spawn(bullet);
+    // Tell the server the player wants to switch weapons
+    [Command]
+    private void CmdSwitchWeapon(int weapon) {
+        RpcSwitchWeapon(weapon);
+    }
+
+    // Show weapons switched for a player on all clients
+    [ClientRpc]
+    private void RpcSwitchWeapon(int weapon) {
+        weapons[holdingWeapon].SetActive(false);
+        holdingWeapon = weapon;
+        weapons[holdingWeapon].SetActive(true);
     }
 
     // Cooldown before shooting again
     IEnumerator StartCooldown() {
-        yield return new WaitForSeconds(shootCooldown);
-        canShoot = true;
-    }
-
-    // Once the bullet has arrived at the enemy, deal damage to it.
-    IEnumerator ShootHitEnemy(RaycastHit _hit) {
-        float travelTime = Vector3.Distance(transform.position, _hit.point) / bulletSpeed;
-        yield return new WaitForSeconds(travelTime);
-        _hit.transform.GetComponent<Health>().TakeDamage(bulletDamage, playerController);
+        yield return new WaitForSeconds(weapons[holdingWeapon].GetComponent<Weapon>().attackCooldown);
+        canAttack = true;
     }
 }

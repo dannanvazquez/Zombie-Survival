@@ -35,7 +35,8 @@ public class PlayerController : NetworkBehaviour {
         // Disable meshes of self
         MeshRenderer[] meshes = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer mesh in meshes) {
-            if (mesh.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject == weaponModel) continue;  // Doesn't hide the gun model from local player
+            // TODO: Make this look cleaner once the player model is a single mesh and more polished
+            if (mesh.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject.transform.parent.gameObject == weaponModel) continue;  // Doesn't hide the gun model from local player
             mesh.enabled = false;
         }
 
