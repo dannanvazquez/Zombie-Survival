@@ -22,7 +22,7 @@ public class EnemyBehavior : NetworkBehaviour {
         // Find the closest player and set enemy's destination towards them.
         Vector3 dest = CustomNetworkManager.Instance.players[0].transform.position;
         foreach (GameObject player in CustomNetworkManager.Instance.players) {
-            if (player.GetComponent<PlayerController>() && player.GetComponent<PlayerController>().canMove && Vector3.Distance(transform.position, player.transform.position) < Vector3.Distance(transform.position, dest)) {
+            if (player != null && player.GetComponent<PlayerController>() && player.GetComponent<PlayerController>().canMove && Vector3.Distance(transform.position, player.transform.position) < Vector3.Distance(transform.position, dest)) {
                 dest = player.transform.position;
             }
         }

@@ -28,6 +28,8 @@ public class PlayerController : NetworkBehaviour {
 
         if (!isLocalPlayer) return;
 
+        Camera.main.gameObject.SetActive(false);
+
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

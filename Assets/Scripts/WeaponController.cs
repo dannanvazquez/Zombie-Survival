@@ -35,15 +35,23 @@ public class WeaponController : NetworkBehaviour {
         }
 
         // Switch weapons
-        if (Input.GetKeyDown(KeyCode.Alpha1) && weapons[0] != null) CmdSwitchWeapon(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2) && weapons[1] != null) CmdSwitchWeapon(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3) && weapons[2] != null) CmdSwitchWeapon(2);
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeapon(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchWeapon(2);
     }
 
     // Tell the server the player wants to hit
     [Command]
     private void CmdHit() {
         weapons[holdingWeapon].GetComponent<Weapon>().Attack();
+    }
+
+    private void SwitchWeapon(int weapon) {
+        if (weapons[weapon] == null || weapon == holdingWeapon) return;
+
+        UIManager.Instance.weaponsUI[holdingWeapon].offsetMin = new Vector2(0, UIManager.Instance.weaponsUI[holdingWeapon].offsetMin.y);
+        UIManager.Instance.weaponsUI[weapon].offsetMin = new Vector2(-50, UIManager.Instance.weaponsUI[weapon].offsetMin.y);
+        CmdSwitchWeapon(weapon);
     }
 
     // Tell the server the player wants to switch weapons
