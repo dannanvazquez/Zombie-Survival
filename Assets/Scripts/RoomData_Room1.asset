@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0864db1c7d894ec4f968b8229d8bff32, type: 3}
+  m_Name: RoomData_Room1
+  m_EditorClassIdentifier: 
+  roomName: Room1
+  openDoorPrice: 500
+  enemySpawnPoints:
+  - {x: -18.5, y: 2.5, z: 5.5}
+  - {x: -27.5, y: 2.5, z: -19.5}
+  - {x: -16.5, y: 2.5, z: -24.5}
+  - {x: -13.5, y: 9.5, z: -26.5}
