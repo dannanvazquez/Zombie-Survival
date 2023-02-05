@@ -44,7 +44,7 @@ public class PlayerController : NetworkBehaviour {
         // Have only self camera enabled
         playerCamera.gameObject.SetActive(true);
 
-        UIManager.Instance.TargetGoldUI(GetComponent<NetworkIdentity>().connectionToClient, gold);
+        UIManager.Instance.goldText.text = $"Gold: {gold}";
     }
 
     private void Update() {

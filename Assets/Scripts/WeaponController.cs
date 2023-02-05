@@ -16,9 +16,9 @@ public class WeaponController : NetworkBehaviour {
 
         for (int i = 0; i < weapons.Length; i++) {
             if (weapons[i] != null) {
-                UIManager.Instance.TargetChangeWeaponNameUI(GetComponent<NetworkIdentity>().connectionToClient, i, weapons[i].GetComponent<Weapon>().weaponName);
+                UIManager.Instance.weaponNames[i].text = weapons[i].GetComponent<Weapon>().weaponName;
             } else {
-                UIManager.Instance.TargetChangeWeaponNameUI(GetComponent<NetworkIdentity>().connectionToClient, i, "Empty");
+                UIManager.Instance.weaponNames[i].text = "Empty";
             }
         }
     }
@@ -56,7 +56,7 @@ public class WeaponController : NetworkBehaviour {
     }
 
     public void SwitchWeapon(int weapon) {
-        if (weapons[weapon] == null) return;
+        if (weapons[weapon] == null || !isLocalPlayer) return;
 
         UIManager.Instance.weaponsUI[holdingWeapon].offsetMin = new Vector2(0, UIManager.Instance.weaponsUI[holdingWeapon].offsetMin.y);
         UIManager.Instance.weaponsUI[weapon].offsetMin = new Vector2(-50, UIManager.Instance.weaponsUI[weapon].offsetMin.y);
