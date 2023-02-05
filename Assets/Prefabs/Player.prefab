@@ -30,6 +30,7 @@ Transform:
   m_Children:
   - {fileID: 4560172889005132982}
   - {fileID: 6756815523476863626}
+  - {fileID: 6691943634462445854}
   m_Father: {fileID: 7347206818471515674}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -95,7 +96,7 @@ MonoBehaviour:
   syncInterval: 0.1
   playerName: Player
   kills: 0
-  gold: 0
+  gold: 10000
   walkingSpeed: 5
   runningSpeed: 7.5
   jumpSpeed: 8
@@ -121,10 +122,12 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  weaponHolder: {fileID: 2215359436606101912}
   weapons:
   - {fileID: 1048373174346199586}
   - {fileID: 7782619448247993374}
   - {fileID: 0}
+  holdingWeapon: 1
 --- !u!114 &-5584478926983404755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -620,6 +623,91 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2746481410415757707, guid: 47143f57d93139c4dad4277dd47a7f33,
     type: 3}
   m_PrefabInstance: {fileID: 5340175615915314581}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5406454534722102785
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5222735759695209901}
+    m_Modifications:
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2746481410415757707, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_Name
+      value: Rifle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2746481410415757707, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5631989318613920040, guid: ea3aff92287166045b8c43b952f93a34,
+        type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 7347206818471515745}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ea3aff92287166045b8c43b952f93a34, type: 3}
+--- !u!4 &6691943634462445854 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1718433897818830623, guid: ea3aff92287166045b8c43b952f93a34,
+    type: 3}
+  m_PrefabInstance: {fileID: 5406454534722102785}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5481556717816698926
 PrefabInstance:

@@ -1,6 +1,3 @@
-using Mirror;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeWeapon : Weapon {
@@ -13,7 +10,7 @@ public class MeleeWeapon : Weapon {
             endPos = hit.point;
             // If the hit object has health, be prepared to deal damage to it.
             if (hit.transform.GetComponent<Health>()) {
-                hit.transform.GetComponent<Health>().TakeDamage(baseDamage, playerController);
+                hit.transform.GetComponent<Health>().TakeDamage(baseDamage, goldPerHit, playerController);
             }
         } else {
             playerController.playerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, maxDistance));

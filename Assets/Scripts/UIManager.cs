@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : NetworkBehaviour {
     public static UIManager Instance { get; private set; }
@@ -38,5 +39,12 @@ public class UIManager : NetworkBehaviour {
     [TargetRpc]
     public void TargetDisableInteractUI(NetworkConnection conn) {
         interactText.gameObject.SetActive(false);
+    }
+
+    [TargetRpc]
+    public void TargetChangeWeaponNameUI(NetworkConnection conn, int order, string name) {
+        if (order >= weaponNames.Length || weaponNames[order] == null) Debug.LogError($"Changing UI order {order} to {name} has failed. Possibly out of bounds.", transform);
+
+        weaponNames[order].text = name;
     }
 }

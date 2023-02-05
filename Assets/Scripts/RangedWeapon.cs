@@ -1,6 +1,5 @@
 using Mirror;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RangedWeapon : Weapon {
@@ -35,6 +34,6 @@ public class RangedWeapon : Weapon {
     IEnumerator ShootHitEnemy(RaycastHit _hit) {
         float travelTime = Vector3.Distance(transform.position, _hit.point) / bulletSpeed;
         yield return new WaitForSeconds(travelTime);
-        _hit.transform.GetComponent<Health>().TakeDamage(baseDamage, playerController);
+        _hit.transform.GetComponent<Health>().TakeDamage(baseDamage, goldPerHit, playerController);
     }
 }

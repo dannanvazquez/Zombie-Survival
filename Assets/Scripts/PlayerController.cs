@@ -16,7 +16,6 @@ public class PlayerController : NetworkBehaviour {
     public float lookSpeed = 2.0f;
     public float lookXLimit = 90.0f;
 
-    [SerializeField] private GameObject weaponModel;
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
@@ -38,12 +37,14 @@ public class PlayerController : NetworkBehaviour {
         MeshRenderer[] meshes = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer mesh in meshes) {
             // TODO: Make this look cleaner once the player model is a single mesh and more polished
-            if (mesh.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject.transform.parent.gameObject == weaponModel) continue;  // Doesn't hide the gun model from local player
+            if (mesh.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject != this.gameObject && mesh.gameObject.transform.parent.gameObject.transform.parent.gameObject == GetComponent<WeaponController>().weaponHolder) continue;  // Doesn't hide the gun model from local player
             mesh.enabled = false;
         }
 
         // Have only self camera enabled
         playerCamera.gameObject.SetActive(true);
+
+        UIManager.Instance.TargetGoldUI(GetComponent<NetworkIdentity>().connectionToClient, gold);
     }
 
     private void Update() {
@@ -98,7 +99,7 @@ public class PlayerController : NetworkBehaviour {
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            weaponModel.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            GetComponent<WeaponController>().weaponHolder.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
     }

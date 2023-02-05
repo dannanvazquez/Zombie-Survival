@@ -19,6 +19,7 @@ public class DoorController : NetworkBehaviour {
         if (!player.isInteracting || player.gold < roomData.openDoorPrice) return;
 
         player.gold -= roomData.openDoorPrice;
+        UIManager.Instance.TargetGoldUI(player.GetComponent<NetworkIdentity>().connectionToClient, player.gold);
         UIManager.Instance.TargetDisableInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient);
         GameManager.Instance.OpenRoom(roomData);
         NetworkServer.Destroy(gameObject);

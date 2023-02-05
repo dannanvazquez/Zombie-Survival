@@ -12,15 +12,14 @@ public class Health : NetworkBehaviour {
     }
 
     // How much damage to deal and destroy self when below 0 health. Gives player gold based on damage and increases kill count if killed.
-    public void TakeDamage(int damage, PlayerController killedByPlayer = null) {
-        if (currentHealth == 0) return;
-        if (currentHealth - damage < 0) damage = currentHealth;
+    public void TakeDamage(int damage, int gold = 0, PlayerController killedByPlayer = null) {
+        if (currentHealth <= 0) return;
         if (killedByPlayer != null) {
-            killedByPlayer.gold += damage;
+            killedByPlayer.gold += gold;
             UIManager.Instance.TargetGoldUI(killedByPlayer.GetComponent<PlayerController>().connectionToClient, killedByPlayer.gold);
         }
 
-        currentHealth -= damage;
+        currentHealth = (currentHealth - damage < 0 ? 0 : currentHealth - damage);
 
         if (GetComponent<PlayerController>() != null) {
             TargetHealthUI(GetComponent<NetworkIdentity>().connectionToClient, currentHealth);

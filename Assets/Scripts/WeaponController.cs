@@ -4,14 +4,23 @@ using Mirror;
 
 [RequireComponent(typeof(PlayerController))]
 public class WeaponController : NetworkBehaviour {
-    [SerializeField] private GameObject[] weapons;
-    private int holdingWeapon = 1;
+    public GameObject weaponHolder;
+    public GameObject[] weapons;
+    [HideInInspector] public int holdingWeapon = 1;
 
     private bool canAttack = true;
     private PlayerController playerController;
 
     private void Start() {
         playerController = GetComponent<PlayerController>();
+
+        for (int i = 0; i < weapons.Length; i++) {
+            if (weapons[i] != null) {
+                UIManager.Instance.TargetChangeWeaponNameUI(GetComponent<NetworkIdentity>().connectionToClient, i, weapons[i].GetComponent<Weapon>().weaponName);
+            } else {
+                UIManager.Instance.TargetChangeWeaponNameUI(GetComponent<NetworkIdentity>().connectionToClient, i, "Empty");
+            }
+        }
     }
 
     private void Update() {
@@ -46,8 +55,8 @@ public class WeaponController : NetworkBehaviour {
         weapons[holdingWeapon].GetComponent<Weapon>().Attack();
     }
 
-    private void SwitchWeapon(int weapon) {
-        if (weapons[weapon] == null || weapon == holdingWeapon) return;
+    public void SwitchWeapon(int weapon) {
+        if (weapons[weapon] == null) return;
 
         UIManager.Instance.weaponsUI[holdingWeapon].offsetMin = new Vector2(0, UIManager.Instance.weaponsUI[holdingWeapon].offsetMin.y);
         UIManager.Instance.weaponsUI[weapon].offsetMin = new Vector2(-50, UIManager.Instance.weaponsUI[weapon].offsetMin.y);
@@ -72,5 +81,14 @@ public class WeaponController : NetworkBehaviour {
     IEnumerator StartCooldown() {
         yield return new WaitForSeconds(weapons[holdingWeapon].GetComponent<Weapon>().attackCooldown);
         canAttack = true;
+    }
+
+    public bool HasWeapon(string weaponName) {
+        for (int i = 0; i < weapons.Length; i++) {
+            if (weapons[i] != null && weapons[i].GetComponent<Weapon>().weaponName == weaponName) {
+                return true;
+            }
+        }
+        return false;
     }
 }
