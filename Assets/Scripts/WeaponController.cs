@@ -52,6 +52,11 @@ public class WeaponController : NetworkBehaviour {
     // Tell the server the player wants to hit
     [Command]
     private void CmdHit() {
+        RangedWeapon rangedWeapon = weapons[holdingWeapon].GetComponent<RangedWeapon>();
+        if (rangedWeapon != null && rangedWeapon.currentAmmo > 0) {
+            rangedWeapon.currentAmmo--;
+            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentAmmo, rangedWeapon.ammoCapacity);
+        }
         weapons[holdingWeapon].GetComponent<Weapon>().Attack();
     }
 
@@ -60,12 +65,19 @@ public class WeaponController : NetworkBehaviour {
 
         UIManager.Instance.weaponsUI[holdingWeapon].offsetMin = new Vector2(0, UIManager.Instance.weaponsUI[holdingWeapon].offsetMin.y);
         UIManager.Instance.weaponsUI[weapon].offsetMin = new Vector2(-50, UIManager.Instance.weaponsUI[weapon].offsetMin.y);
+
         CmdSwitchWeapon(weapon);
     }
 
     // Tell the server the player wants to switch weapons
     [Command]
     private void CmdSwitchWeapon(int weapon) {
+        RangedWeapon rangedWeapon = weapons[weapon].GetComponent<RangedWeapon>();
+        if (rangedWeapon != null) {
+            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentAmmo, rangedWeapon.ammoCapacity);
+        } else {
+            UIManager.Instance.TargetDisableAmmoUI(GetComponent<NetworkIdentity>().connectionToClient);
+        }
         RpcSwitchWeapon(weapon);
     }
 

@@ -15,6 +15,7 @@ public class UIManager : NetworkBehaviour {
 
     public RectTransform[] weaponsUI;
     public TextMeshProUGUI[] weaponNames;
+    public TextMeshProUGUI ammoText;
 
     private void Awake() {
         // If there is an instance, and it's not me, delete myself.
@@ -46,5 +47,16 @@ public class UIManager : NetworkBehaviour {
         if (order >= weaponNames.Length || weaponNames[order] == null) Debug.LogError($"Changing UI order {order} to {name} has failed. Possibly out of bounds.", transform);
 
         weaponNames[order].text = name;
+    }
+
+    [TargetRpc]
+    public void TargetUpdateAmmoUI(NetworkConnection conn, int ammo, int maxAmmo) {
+        ammoText.text = $"{ammo}/{maxAmmo} Ammo";
+        ammoText.enabled = true;
+    }
+
+    [TargetRpc]
+    public void TargetDisableAmmoUI(NetworkConnection conn) {
+        ammoText.enabled = false;
     }
 }

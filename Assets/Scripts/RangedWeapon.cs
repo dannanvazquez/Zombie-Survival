@@ -6,6 +6,12 @@ public class RangedWeapon : Weapon {
     public GameObject bulletPrefab;
     public Transform bulletSpawnTrans;
     public float bulletSpeed = 30f;
+    public int ammoCapacity = 300;
+    public int currentAmmo = 300;
+
+    private void Awake() {
+        currentAmmo = ammoCapacity;
+    }
 
     public override void Attack() {
         // Checks if player is looking at an object within maxDistance and set its endPos at the hit object. If there is no object in sight, end bullet at maxDistance.
