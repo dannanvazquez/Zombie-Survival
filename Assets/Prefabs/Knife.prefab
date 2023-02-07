@@ -130,9 +130,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: Knife
-  baseDamage: 10
+  baseDamage: 6
   attackCooldown: 0.5
   maxDistance: 3
+  price: 0
+  goldPerHit: 10
   playerController: {fileID: 0}
 --- !u!1 &8831207294811723385
 GameObject:

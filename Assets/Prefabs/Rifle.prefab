@@ -132,16 +132,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: Rifle
-  baseDamage: 30
-  attackCooldown: 0.5
+  baseDamage: 6
+  attackCooldown: 0.2
   maxDistance: 25
-  price: 600
-  goldPerHit: 10
+  price: 500
+  goldPerHit: 7
   playerController: {fileID: 0}
   bulletPrefab: {fileID: 5291505731297140909, guid: 5c50c63172779244c9d98f8548889875,
     type: 3}
   bulletSpawnTrans: {fileID: 7603788798058687402}
   bulletSpeed: 30
+  ammoCapacity: 256
+  currentAmmo: 256
+  ammoPrice: 400
 --- !u!1 &6033691124294868044
 GameObject:
   m_ObjectHideFlags: 0

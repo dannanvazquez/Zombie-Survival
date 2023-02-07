@@ -7,7 +7,8 @@ public class RangedWeapon : Weapon {
     public Transform bulletSpawnTrans;
     public float bulletSpeed = 30f;
     public int ammoCapacity = 300;
-    public int currentAmmo = 300;
+    [HideInInspector] public int currentAmmo = 300;
+    public int ammoPrice = 400;
 
     private void Awake() {
         currentAmmo = ammoCapacity;

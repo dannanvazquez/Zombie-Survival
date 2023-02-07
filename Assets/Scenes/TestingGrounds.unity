@@ -2535,7 +2535,7 @@ MonoBehaviour:
   zombiePrefab: {fileID: 2476933066427013539, guid: 7a6afcf4ccf55d149ac05b11270b74ee,
     type: 3}
   spawnIntervals: 15
-  spawnsPerInterval: 2
+  spawnsPerInterval: 0
   roomsData:
   - {fileID: 11400000, guid: 3dbec442fce55b142848f10a9489ddd5, type: 2}
 --- !u!114 &246483759

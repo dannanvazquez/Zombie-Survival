@@ -17,10 +17,18 @@ public class WeaponShopController : NetworkBehaviour {
         if (!other.gameObject.CompareTag("Player") || !isServer) return;
         PlayerController player = other.GetComponent<PlayerController>();
 
-        if (player.gold >= weapon.price) {
-            UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"Press E to buy {weapon.weaponName} for {weapon.price} gold");
+        if (!IsBuyingAmmo(other.GetComponent<WeaponController>())) {
+            if (player.gold >= weapon.price) {
+                UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"Press E to buy {weapon.weaponName} for {weapon.price} gold");
+            } else {
+                UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"You need {weapon.price} gold to buy {weapon.weaponName}");
+            }
         } else {
-            UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"You need {weapon.price} gold to buy {weapon.weaponName}");
+            if (player.gold >= weapon.GetComponent<RangedWeapon>().ammoPrice) {
+                UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"Press E to buy {weapon.weaponName} ammo for {weapon.GetComponent<RangedWeapon>().ammoPrice} gold");
+            } else {
+                UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"You need {weapon.GetComponent<RangedWeapon>().ammoPrice} gold to buy {weapon.weaponName} ammo");
+            }
         }
     }
 
@@ -29,16 +37,29 @@ public class WeaponShopController : NetworkBehaviour {
         PlayerController player = other.GetComponent<PlayerController>();
 
         // TODO: Make it so it's not enabling the UI every frame for better performance. We only want to change the UI once the player has sufficient gold.
-        if (player.gold >= weapon.price) {
-            UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"Press E to buy {weapon.weaponName} for {weapon.price} gold");
+        if (!IsBuyingAmmo(other.GetComponent<WeaponController>())) {
+            if (player.gold >= weapon.price) {
+                UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"Press E to buy {weapon.weaponName} for {weapon.price} gold");
+            }
+
+            if (!player.isInteracting || player.gold < weapon.price || other.GetComponent<WeaponController>().HasWeapon(weapon.weaponName)) return;
+
+            AddWeapon(player);
+
+            if (weapon.GetComponent<RangedWeapon>() != null) {
+                TargetChangeToAmmo(player.GetComponent<NetworkIdentity>().connectionToClient);
+            } else {
+                UIManager.Instance.TargetDisableInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient);
+            }
+        } else {
+            if (player.gold >= weapon.GetComponent<RangedWeapon>().ammoPrice) {
+                UIManager.Instance.TargetInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient, $"Press E to buy {weapon.weaponName} ammo for {weapon.GetComponent<RangedWeapon>().ammoPrice} gold");
+            }
+
+            if (!player.isInteracting || player.gold < weapon.GetComponent<RangedWeapon>().ammoPrice || !other.GetComponent<WeaponController>().HasWeapon(weapon.weaponName)) return;
+
+            BuyAmmo(player);
         }
-
-        if (!player.isInteracting || player.gold < weapon.price || other.GetComponent<WeaponController>().HasWeapon(weapon.weaponName)) return;
-
-        AddWeapon(player);
-
-        UIManager.Instance.TargetDisableInteractUI(player.GetComponent<NetworkIdentity>().connectionToClient);
-        // TODO: Switch this to an ammo shop here once ammo is implemented because you can only have one of each weapon.
     }
 
     private void OnTriggerExit(Collider other) {
@@ -74,6 +95,27 @@ public class WeaponShopController : NetworkBehaviour {
         }
     }
 
+    // Gives the player max ammo and updates the UI if needed.
+    private void BuyAmmo(PlayerController player) {
+        WeaponController weaponController = player.GetComponent<WeaponController>();
+
+        for (int i = 0; i < weaponController.weapons.Length; i++) {
+            Weapon iWeapon = weaponController.weapons[i].GetComponent<Weapon>();
+            RangedWeapon iRangedWeapon = weaponController.weapons[i].GetComponent<RangedWeapon>();
+            if (weaponController.weapons[i] != null && iWeapon.weaponName == weapon.weaponName) {
+                player.gold -= iRangedWeapon.ammoPrice;
+                UIManager.Instance.TargetGoldUI(player.GetComponent<NetworkIdentity>().connectionToClient, player.gold);
+
+                iRangedWeapon.currentAmmo = iRangedWeapon.ammoCapacity;
+                if (i == weaponController.holdingWeapon) {
+                    UIManager.Instance.TargetUpdateAmmoUI(player.GetComponent<NetworkIdentity>().connectionToClient, iRangedWeapon.currentAmmo, iRangedWeapon.ammoCapacity);
+                }
+                
+                return;
+            }
+        }
+    }
+
     [ClientRpc]
     private void RpcAddWeapon(WeaponController weaponController, int holdingWeapon) {
         GameObject addedWeapon = null;
@@ -86,5 +128,23 @@ public class WeaponShopController : NetworkBehaviour {
 
         weaponController.weapons[holdingWeapon] = addedWeapon;
         weaponController.SwitchWeapon(holdingWeapon);
+    }
+
+    [TargetRpc]
+    private void TargetChangeToAmmo(NetworkConnection conn) {
+        infoText.text = $"{weapon.weaponName} Ammo\n{weapon.GetComponent<RangedWeapon>().ammoPrice}";
+    }
+
+    // Checks if the player is trying to buy ammo
+    private bool IsBuyingAmmo(WeaponController weaponController) {
+        if (weapon.GetComponent<RangedWeapon>() == null) return false;
+        
+        for (int i = 0; i < weaponController.weapons.Length; i++) {
+            if (weaponController.weapons[i] != null && weaponController.weapons[i].GetComponent<Weapon>().weaponName == weapon.weaponName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
