@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private float spawnIntervals;
     [SerializeField] private float spawnsPerInterval;
     [SerializeField] private List<RoomScriptableObject> roomsData = new();
+    private int round = 1;
 
     private void Awake() {
         // If there is an instance, and it's not me, delete myself.
@@ -49,11 +50,23 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Trying to spawn enemies when currentEnemySpawnPoints is empty.", transform);
             yield break;
         }
-        for (int i = 0; i < spawnsPerInterval; i++) {
-            GameObject zombie = Instantiate(zombiePrefab, currentEnemySpawnPoints[Random.Range(0, currentEnemySpawnPoints.Count)], Quaternion.identity);
+
+        int spawnIterator = 0;
+        for (int i = 0; i < spawnsPerInterval * round; i++) {
+            GameObject zombie = Instantiate(zombiePrefab, currentEnemySpawnPoints[spawnIterator], Quaternion.identity);
             NetworkServer.Spawn(zombie);
+
+            if (spawnIterator + 1 < currentEnemySpawnPoints.Count) {
+                spawnIterator++;
+            } else {
+                spawnIterator = 0;
+                // Debatable if there should be cooldown before an enemy spawns again in the same window. Decide later.
+                //yield return new WaitForSeconds(1);
+            }
         }
+
         yield return new WaitForSeconds(spawnIntervals);
+        round++;
         StartCoroutine(SpawnEnemies());
     }
 }

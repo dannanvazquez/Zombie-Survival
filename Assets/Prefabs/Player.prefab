@@ -96,7 +96,7 @@ MonoBehaviour:
   syncInterval: 0.1
   playerName: Player
   kills: 0
-  gold: 10000
+  gold: 0
   walkingSpeed: 5
   runningSpeed: 7.5
   jumpSpeed: 8
@@ -104,7 +104,6 @@ MonoBehaviour:
   playerCamera: {fileID: 7347206818698249947}
   lookSpeed: 2
   lookXLimit: 90
-  weaponModel: {fileID: 2215359436606101912}
   canMove: 1
   isInteracting: 0
 --- !u!114 &-704853342902427849
@@ -599,11 +598,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5631989318613920040, guid: 47143f57d93139c4dad4277dd47a7f33,
-        type: 3}
-      propertyPath: baseDamage
-      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5631989318613920040, guid: 47143f57d93139c4dad4277dd47a7f33,
         type: 3}
