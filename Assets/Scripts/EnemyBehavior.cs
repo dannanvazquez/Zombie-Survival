@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 public class EnemyBehavior : NetworkBehaviour {
     private float moveSpeed = 2f;
@@ -49,5 +50,12 @@ public class EnemyBehavior : NetworkBehaviour {
                 damageTimer = damageCooldown;
             }
         }
+    }
+
+    private void OnDestroy() {
+        if (!isServer) return;
+
+        GameManager.Instance.enemiesLeft--;
+        UIManager.Instance.RpcUpdateRemainingEnemiesUI(GameManager.Instance.enemiesLeft);
     }
 }

@@ -17,6 +17,10 @@ public class UIManager : NetworkBehaviour {
     public TextMeshProUGUI[] weaponNames;
     public TextMeshProUGUI ammoText;
 
+    public TextMeshProUGUI roundCounterText;
+    public TextMeshProUGUI enemyCounterText;
+    public TextMeshProUGUI timeElapsedText;
+
     private void Awake() {
         // If there is an instance, and it's not me, delete myself.
         if (Instance != null && Instance != this) Destroy(this);
@@ -58,5 +62,26 @@ public class UIManager : NetworkBehaviour {
     [TargetRpc]
     public void TargetDisableAmmoUI(NetworkConnection conn) {
         ammoText.enabled = false;
+    }
+
+    [ClientRpc]
+    public void RpcUpdateRoundUI(int round) {
+        roundCounterText.text = "Round " + round.ToString();
+    }
+
+    [ClientRpc]
+    public void RpcUpdateRemainingEnemiesUI(int enemiesLeft) {
+        enemyCounterText.text = enemiesLeft.ToString() + " Enemies Left";
+    }
+
+    [ClientRpc]
+    public void RpcUpdateTimeElapsedUI(int secs) {
+        if (secs < 3600) {  // Checks for less than an hour
+            timeElapsedText.text = $"Time Elapsed: {(secs / 60):D2}:{(secs % 60):D2}";
+        } else if (secs < 360000) {  // Checks for less than 100 hours
+            timeElapsedText.text = $"Time Elapsed: {(secs / 3600):D2}:{(secs / 60):D2}:{(secs % 60):D2}";
+        } else {  // Anything over 100 hours
+            timeElapsedText.text = $"Time Elapsed: Too long";
+        }
     }
 }

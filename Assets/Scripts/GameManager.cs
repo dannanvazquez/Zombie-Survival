@@ -7,12 +7,12 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
 
     public int minPlayers = 2;
-    [SerializeField] private GameObject zombiePrefab;
     private List<Vector3> currentEnemySpawnPoints = new();
-    [SerializeField] private float spawnIntervals;
-    [SerializeField] private float spawnsPerInterval;
     [SerializeField] private List<RoomScriptableObject> roomsData = new();
-    private int round = 1;
+    [SerializeField] private List<RoundScriptableObject> roundsData = new();
+    [HideInInspector] public int roundsCompleted = 0;
+    [HideInInspector] public int enemiesLeft = 0;
+    [HideInInspector] public int secsElapsed = 0;
 
     private void Awake() {
         // If there is an instance, and it's not me, delete myself.
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
 
     public void StartGame() {
         StartCoroutine(SpawnEnemies());
+        StartCoroutine(Timer());
     }
 
     // Spawns enemies at random spawns and once spawnIntervals is over, continue looping.
@@ -51,22 +52,46 @@ public class GameManager : MonoBehaviour {
             yield break;
         }
 
-        int spawnIterator = 0;
-        for (int i = 0; i < spawnsPerInterval * round; i++) {
-            GameObject zombie = Instantiate(zombiePrefab, currentEnemySpawnPoints[spawnIterator], Quaternion.identity);
-            NetworkServer.Spawn(zombie);
+        for (roundsCompleted = 0; roundsCompleted < roundsData.Count; roundsCompleted++) {
+            UIManager.Instance.RpcUpdateRoundUI(roundsCompleted + 1);
 
-            if (spawnIterator + 1 < currentEnemySpawnPoints.Count) {
-                spawnIterator++;
-            } else {
-                spawnIterator = 0;
-                // Debatable if there should be cooldown before an enemy spawns again in the same window. Decide later.
-                //yield return new WaitForSeconds(1);
+            enemiesLeft = roundsData[roundsCompleted].enemyCount;
+            UIManager.Instance.RpcUpdateRemainingEnemiesUI(enemiesLeft);
+
+            roundsData[roundsCompleted].MakeList();
+
+            int spawnIterator = 0;
+            for (int i = 0; i < roundsData[roundsCompleted].enemyCount; i++) {
+                GameObject enemy = Instantiate(roundsData[roundsCompleted].spawnOrder[i], currentEnemySpawnPoints[spawnIterator], Quaternion.identity);
+                NetworkServer.Spawn(enemy);
+
+                if (spawnIterator + 1 < currentEnemySpawnPoints.Count) {
+                    spawnIterator++;
+                } else {
+                    spawnIterator = 0;
+                }
+            }
+
+            while (enemiesLeft > 0) {
+                yield return new WaitForSeconds(1f);
+            }
+
+            if (roundsCompleted + 1 == roundsData.Count) {
+                // TODO: Make win screen here with stats
+                Debug.Log("You Won!");
+                break;
             }
         }
 
-        yield return new WaitForSeconds(spawnIntervals);
-        round++;
-        StartCoroutine(SpawnEnemies());
+    }
+
+    IEnumerator Timer() {
+        yield return new WaitForSeconds(1f);
+
+        if (secsElapsed < 360000) secsElapsed++;
+
+        UIManager.Instance.RpcUpdateTimeElapsedUI(secsElapsed);
+
+        StartCoroutine(Timer());
     }
 }

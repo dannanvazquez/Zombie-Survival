@@ -56,8 +56,8 @@ public class WeaponController : NetworkBehaviour {
         if (rangedWeapon != null && rangedWeapon.currentAmmo > 0) {
             rangedWeapon.currentAmmo--;
             UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentAmmo, rangedWeapon.ammoCapacity);
+            weapons[holdingWeapon].GetComponent<Weapon>().Attack();
         }
-        weapons[holdingWeapon].GetComponent<Weapon>().Attack();
     }
 
     public void SwitchWeapon(int weapon) {

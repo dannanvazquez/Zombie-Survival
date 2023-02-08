@@ -41,6 +41,6 @@ public class RangedWeapon : Weapon {
     IEnumerator ShootHitEnemy(RaycastHit _hit) {
         float travelTime = Vector3.Distance(transform.position, _hit.point) / bulletSpeed;
         yield return new WaitForSeconds(travelTime);
-        _hit.transform.GetComponent<Health>().TakeDamage(baseDamage, goldPerHit, playerController);
+        if (_hit.transform != null) _hit.transform.GetComponent<Health>().TakeDamage(baseDamage, goldPerHit, playerController);
     }
 }
