@@ -6,9 +6,11 @@ using System.Collections;
 public class Health : NetworkBehaviour {
     [SerializeField] private int maxHealth = 100;
     private int currentHealth = 100;
+    [SerializeField] private int healthRegen = 0;
 
     private void Start() {
         currentHealth = maxHealth;
+        StartCoroutine(RegenHealth());
     }
 
     // How much damage to deal and destroy self when below 0 health. Gives player gold based on damage and increases kill count if killed.
@@ -52,7 +54,7 @@ public class Health : NetworkBehaviour {
     // Updates the UI to the local player's currentHealth.
     [TargetRpc]
     private void TargetHealthUI(NetworkConnection conn, int health) {
-        UIManager.Instance.healthBarUI.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, health * 2);
+        UIManager.Instance.healthBarUI.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, health * 3);
         UIManager.Instance.healthText.text = $"{health}/{maxHealth}";
     }
 
@@ -62,5 +64,22 @@ public class Health : NetworkBehaviour {
         yield return new WaitForSeconds(10f);
         GetComponent<PlayerController>().RpcCanMove(true);
         Heal(maxHealth);
+    }
+
+    // Regens health by healthRegen every second.
+    IEnumerator RegenHealth() {
+        yield return new WaitForSeconds(1f);
+
+        if (currentHealth + healthRegen > maxHealth) {
+            currentHealth = maxHealth;
+        } else {
+            currentHealth += healthRegen;
+        }
+
+        if (GetComponent<PlayerController>() != null) {
+            TargetHealthUI(GetComponent<NetworkIdentity>().connectionToClient, currentHealth);
+        }
+
+        StartCoroutine(RegenHealth());
     }
 }

@@ -143,6 +143,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 100
+  healthRegen: 5
 --- !u!143 &7347206818471515750
 CharacterController:
   m_ObjectHideFlags: 0
