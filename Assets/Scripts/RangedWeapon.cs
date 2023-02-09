@@ -56,11 +56,11 @@ public class RangedWeapon : Weapon {
         isReloading = true;
         yield return new WaitForSeconds(reloadTime);
 
-        int reloadClip = clipCapacity;
-        if (currentAmmo < clipCapacity) reloadClip = currentAmmo;
+        int reloadAmount = clipCapacity - currentClip;
+        if (currentAmmo < reloadAmount) reloadAmount = currentAmmo;
 
-        currentAmmo -= reloadClip;
-        currentClip = reloadClip;
+        currentAmmo -= reloadAmount;
+        currentClip += reloadAmount;
 
         UIManager.Instance.TargetUpdateAmmoUI(playerController.GetComponent<NetworkIdentity>().connectionToClient, currentClip, currentAmmo);
 
