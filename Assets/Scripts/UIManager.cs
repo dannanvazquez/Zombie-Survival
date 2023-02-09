@@ -54,8 +54,8 @@ public class UIManager : NetworkBehaviour {
     }
 
     [TargetRpc]
-    public void TargetUpdateAmmoUI(NetworkConnection conn, int ammo, int maxAmmo) {
-        ammoText.text = $"{ammo}/{maxAmmo} Ammo";
+    public void TargetUpdateAmmoUI(NetworkConnection conn, int clip, int ammo) {
+        ammoText.text = $"{clip} / {ammo} Ammo";
         ammoText.enabled = true;
     }
 

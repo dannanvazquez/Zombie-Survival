@@ -2532,10 +2532,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minPlayers: 1
-  zombiePrefab: {fileID: 2476933066427013539, guid: 7a6afcf4ccf55d149ac05b11270b74ee,
-    type: 3}
-  spawnIntervals: 15
-  spawnsPerInterval: 4
   roomsData:
   - {fileID: 11400000, guid: 3dbec442fce55b142848f10a9489ddd5, type: 2}
   roundsData:
@@ -2549,7 +2545,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ed05ac6b3c896434b8389f0b2efa2ef6, type: 2}
   - {fileID: 11400000, guid: b6c0a95ef4b2f7c43baef0d3164006c8, type: 2}
   - {fileID: 11400000, guid: 5d14cd6a93f378540902ddf6e5c9cd35, type: 2}
+  roundsCompleted: 0
   enemiesLeft: 0
+  secsElapsed: 0
 --- !u!114 &246483759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6165,7 +6163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 300/300 Ammo
+  m_text: 10 / 290 Ammo
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

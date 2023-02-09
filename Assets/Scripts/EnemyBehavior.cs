@@ -51,11 +51,4 @@ public class EnemyBehavior : NetworkBehaviour {
             }
         }
     }
-
-    private void OnDestroy() {
-        if (!isServer) return;
-
-        GameManager.Instance.enemiesLeft--;
-        UIManager.Instance.RpcUpdateRemainingEnemiesUI(GameManager.Instance.enemiesLeft);
-    }
 }

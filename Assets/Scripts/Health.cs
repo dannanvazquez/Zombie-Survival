@@ -30,6 +30,9 @@ public class Health : NetworkBehaviour {
             if (GetComponent<PlayerController>() != null) {
                 StartCoroutine(KillPlayer());
             } else {
+                GameManager.Instance.enemiesLeft--;
+                UIManager.Instance.RpcUpdateRemainingEnemiesUI(GameManager.Instance.enemiesLeft);
+
                 NetworkServer.Destroy(gameObject);
             }
         }

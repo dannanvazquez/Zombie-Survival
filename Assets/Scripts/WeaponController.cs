@@ -47,16 +47,22 @@ public class WeaponController : NetworkBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeapon(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchWeapon(2);
+
+        if (Input.GetKeyDown(KeyCode.R)) CmdReload();
     }
 
     // Tell the server the player wants to hit
     [Command]
     private void CmdHit() {
         RangedWeapon rangedWeapon = weapons[holdingWeapon].GetComponent<RangedWeapon>();
-        if (rangedWeapon != null && rangedWeapon.currentAmmo > 0) {
-            rangedWeapon.currentAmmo--;
-            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentAmmo, rangedWeapon.ammoCapacity);
+        if (rangedWeapon != null && rangedWeapon.currentClip > 0 && !rangedWeapon.isReloading) {
+            rangedWeapon.currentClip--;
+            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentClip, rangedWeapon.currentAmmo);
             weapons[holdingWeapon].GetComponent<Weapon>().Attack();
+            
+            if (rangedWeapon.currentClip == 0) {
+                StartCoroutine(weapons[holdingWeapon].GetComponent<RangedWeapon>().Reload());
+            }
         }
     }
 
@@ -74,7 +80,7 @@ public class WeaponController : NetworkBehaviour {
     private void CmdSwitchWeapon(int weapon) {
         RangedWeapon rangedWeapon = weapons[weapon].GetComponent<RangedWeapon>();
         if (rangedWeapon != null) {
-            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentAmmo, rangedWeapon.ammoCapacity);
+            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentClip, rangedWeapon.currentAmmo);
         } else {
             UIManager.Instance.TargetDisableAmmoUI(GetComponent<NetworkIdentity>().connectionToClient);
         }
@@ -102,5 +108,10 @@ public class WeaponController : NetworkBehaviour {
             }
         }
         return false;
+    }
+
+    [Command]
+    private void CmdReload() {
+        StartCoroutine(weapons[holdingWeapon].GetComponent<RangedWeapon>().Reload());
     }
 }

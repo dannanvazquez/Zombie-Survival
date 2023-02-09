@@ -108,7 +108,7 @@ public class WeaponShopController : NetworkBehaviour {
 
                 iRangedWeapon.currentAmmo = iRangedWeapon.ammoCapacity;
                 if (i == weaponController.holdingWeapon) {
-                    UIManager.Instance.TargetUpdateAmmoUI(player.GetComponent<NetworkIdentity>().connectionToClient, iRangedWeapon.currentAmmo, iRangedWeapon.ammoCapacity);
+                    UIManager.Instance.TargetUpdateAmmoUI(player.GetComponent<NetworkIdentity>().connectionToClient, iRangedWeapon.currentClip, iRangedWeapon.currentAmmo);
                 }
                 
                 return;

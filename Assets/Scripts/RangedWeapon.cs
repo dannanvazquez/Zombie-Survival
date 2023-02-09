@@ -7,11 +7,17 @@ public class RangedWeapon : Weapon {
     public Transform bulletSpawnTrans;
     public float bulletSpeed = 30f;
     public int ammoCapacity = 300;
-    [HideInInspector] public int currentAmmo = 300;
+    [HideInInspector] public int currentAmmo = 290;
+    public int clipCapacity = 10;
+    [HideInInspector] public int currentClip = 10;
     public int ammoPrice = 400;
+    public float reloadTime = 1.5f;
+    public bool isReloading = false;
 
     private void Awake() {
-        currentAmmo = ammoCapacity;
+        currentAmmo = ammoCapacity - clipCapacity;
+        currentClip = clipCapacity;
+
     }
 
     public override void Attack() {
@@ -42,5 +48,22 @@ public class RangedWeapon : Weapon {
         float travelTime = Vector3.Distance(transform.position, _hit.point) / bulletSpeed;
         yield return new WaitForSeconds(travelTime);
         if (_hit.transform != null) _hit.transform.GetComponent<Health>().TakeDamage(baseDamage, goldPerHit, playerController);
+    }
+
+    public IEnumerator Reload() {
+        if (currentAmmo == 0) yield break;
+
+        isReloading = true;
+        yield return new WaitForSeconds(reloadTime);
+
+        int reloadClip = clipCapacity;
+        if (currentAmmo < clipCapacity) reloadClip = currentAmmo;
+
+        currentAmmo -= reloadClip;
+        currentClip = reloadClip;
+
+        UIManager.Instance.TargetUpdateAmmoUI(playerController.GetComponent<NetworkIdentity>().connectionToClient, currentClip, currentAmmo);
+
+        isReloading = false;
     }
 }
