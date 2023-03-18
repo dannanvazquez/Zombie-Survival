@@ -10,7 +10,6 @@ public class PlayerController : NetworkBehaviour {
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
-    public float gravity = 20.0f;
 
     public Camera playerCamera;
     public float lookSpeed = 2.0f;
@@ -75,25 +74,28 @@ public class PlayerController : NetworkBehaviour {
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float curSpeedX = canMove ? Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? Input.GetAxis("Horizontal") : 0;
+
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+        moveDirection.Normalize();
+        moveDirection.x *= (isRunning ? runningSpeed : walkingSpeed);
+        moveDirection.z *= (isRunning ? runningSpeed : walkingSpeed);
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded) {
             moveDirection.y = jumpSpeed;
         } else {
             moveDirection.y = movementDirectionY;
         }
-        moveDirection.Normalize();
 
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
         // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
         // as an acceleration (ms^-2)
         if (!characterController.isGrounded) {
-            moveDirection.y -= gravity * Time.deltaTime;
+            moveDirection += Physics.gravity * Time.deltaTime;
         }
 
         // Move the controller
-        if (characterController.enabled) characterController.Move(moveDirection * Time.deltaTime * (isRunning ? runningSpeed : walkingSpeed));
+        if (characterController.enabled) characterController.Move(moveDirection * Time.deltaTime);
 
         // Player and Camera rotation
         if (canMove) {

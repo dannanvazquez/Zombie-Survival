@@ -99,8 +99,7 @@ MonoBehaviour:
   gold: 0
   walkingSpeed: 5
   runningSpeed: 7.5
-  jumpSpeed: 7
-  gravity: 24
+  jumpSpeed: 5
   playerCamera: {fileID: 7347206818698249947}
   lookSpeed: 2
   lookXLimit: 90
