@@ -78,9 +78,12 @@ public class WeaponController : NetworkBehaviour {
     // Tell the server the player wants to switch weapons
     [Command]
     private void CmdSwitchWeapon(int weapon) {
-        RangedWeapon rangedWeapon = weapons[weapon].GetComponent<RangedWeapon>();
-        if (rangedWeapon != null) {
-            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentClip, rangedWeapon.currentAmmo);
+        if (weapons[holdingWeapon].TryGetComponent(out RangedWeapon currentRangedWeapon)) {
+            currentRangedWeapon.InterruptReload();
+        }
+
+        if (weapons[weapon].TryGetComponent(out RangedWeapon nextRangedWeapon)) {
+            UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, nextRangedWeapon.currentClip, nextRangedWeapon.currentAmmo);
         } else {
             UIManager.Instance.TargetDisableAmmoUI(GetComponent<NetworkIdentity>().connectionToClient);
         }
@@ -112,6 +115,8 @@ public class WeaponController : NetworkBehaviour {
 
     [Command]
     private void CmdReload() {
-        StartCoroutine(weapons[holdingWeapon].GetComponent<RangedWeapon>().Reload());
+        if (weapons[holdingWeapon].TryGetComponent(out RangedWeapon currentRangedWeapon)) {
+            StartCoroutine(currentRangedWeapon.GetComponent<RangedWeapon>().Reload());
+        }
     }
 }

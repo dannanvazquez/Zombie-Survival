@@ -51,10 +51,15 @@ public class RangedWeapon : Weapon {
     }
 
     public IEnumerator Reload() {
-        if (currentAmmo == 0) yield break;
+        if (currentAmmo == clipCapacity || isReloading) yield break;
 
         isReloading = true;
         yield return new WaitForSeconds(reloadTime);
+
+        // Check if weapon has been set to not reload(such as switching weapon) by the time the reload is ready to happen.
+        if (!isReloading) {
+            yield break;
+        }
 
         int reloadAmount = clipCapacity - currentClip;
         if (currentAmmo < reloadAmount) reloadAmount = currentAmmo;
@@ -64,6 +69,10 @@ public class RangedWeapon : Weapon {
 
         UIManager.Instance.TargetUpdateAmmoUI(playerController.GetComponent<NetworkIdentity>().connectionToClient, currentClip, currentAmmo);
 
+        isReloading = false;
+    }
+
+    public void InterruptReload() {
         isReloading = false;
     }
 }
