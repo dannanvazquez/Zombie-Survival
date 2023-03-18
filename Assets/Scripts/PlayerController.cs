@@ -73,8 +73,8 @@ public class PlayerController : NetworkBehaviour {
 
         // Press Left Shift to run
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
-        float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
-        float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedX = canMove ? Input.GetAxis("Vertical") : 0;
+        float curSpeedY = canMove ? Input.GetAxis("Horizontal") : 0;
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
@@ -83,6 +83,7 @@ public class PlayerController : NetworkBehaviour {
         } else {
             moveDirection.y = movementDirectionY;
         }
+        moveDirection.Normalize();
 
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
         // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
@@ -92,7 +93,7 @@ public class PlayerController : NetworkBehaviour {
         }
 
         // Move the controller
-        if (characterController.enabled) characterController.Move(moveDirection * Time.deltaTime);
+        if (characterController.enabled) characterController.Move(moveDirection * Time.deltaTime * (isRunning ? runningSpeed : walkingSpeed));
 
         // Player and Camera rotation
         if (canMove) {
