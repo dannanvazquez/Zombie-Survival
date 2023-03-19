@@ -1,12 +1,15 @@
 using UnityEngine;
 using Mirror;
-using Unity.VisualScripting;
 using System.Collections;
+using System;
 
 public class Health : NetworkBehaviour {
     [SerializeField] private int maxHealth = 100;
     private int currentHealth = 100;
     [SerializeField] private int healthRegen = 0;
+
+    [SerializeField] public Armor topPieceArmor;
+    [SerializeField] public Armor bottomPieceArmor;
 
     private void Start() {
         currentHealth = maxHealth;
@@ -20,6 +23,11 @@ public class Health : NetworkBehaviour {
             killedByPlayer.gold += gold;
             UIManager.Instance.TargetGoldUI(killedByPlayer.GetComponent<PlayerController>().connectionToClient, killedByPlayer.gold);
         }
+
+        float damageReduc = 1;
+        if (topPieceArmor != null) damageReduc -= topPieceArmor.reductionPerc;
+        if (bottomPieceArmor != null) damageReduc -= bottomPieceArmor.reductionPerc;
+        damage = (int)Math.Round(damage * damageReduc, 0);
 
         currentHealth = (currentHealth - damage < 0 ? 0 : currentHealth - damage);
 
@@ -81,5 +89,27 @@ public class Health : NetworkBehaviour {
         }
 
         StartCoroutine(RegenHealth());
+    }
+
+    public void AddArmor(Armor armor) {
+        if (armor.isTopPiece) {
+            topPieceArmor = armor;
+        } else {
+            bottomPieceArmor = armor;
+        }
+    }
+
+    public bool IsArmorUpgrade(Armor armor) {
+        if (armor.isTopPiece) {
+            if (topPieceArmor == null || armor.reductionPerc > topPieceArmor.reductionPerc) {
+                return true;
+            }
+        } else {
+            if (bottomPieceArmor == null || armor.reductionPerc > bottomPieceArmor.reductionPerc) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
