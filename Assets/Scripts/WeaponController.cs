@@ -50,7 +50,9 @@ public class WeaponController : NetworkBehaviour {
     // Tell the server the player wants to hit
     [Command]
     private void CmdHit() {
-        if (weapons[holdingWeapon].TryGetComponent(out RangedWeapon rangedWeapon) && rangedWeapon.currentClip > 0 && !rangedWeapon.isReloading) {
+        if (weapons[holdingWeapon].TryGetComponent(out RangedWeapon rangedWeapon)) {
+            if (rangedWeapon.currentClip <= 0 || rangedWeapon.isReloading) return;
+
             rangedWeapon.currentClip--;
             UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentClip, rangedWeapon.currentAmmo);
             weapons[holdingWeapon].GetComponent<Weapon>().Attack();
