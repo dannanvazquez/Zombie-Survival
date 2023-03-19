@@ -30,15 +30,11 @@ public class WeaponController : NetworkBehaviour {
         if (canAttack && playerController.canMove) {
             if (weapons[holdingWeapon].GetComponent<MeleeWeapon>()) {
                 if (Input.GetButtonDown("Fire1")) {
-                    canAttack = false;
-                    CmdHit();
-                    StartCoroutine(StartCooldown());
+                    StartCoroutine(StartAttacking());
                 }
             } else {
                 if (Input.GetButton("Fire1")) {
-                    canAttack = false;
-                    CmdHit();
-                    StartCoroutine(StartCooldown());
+                    StartCoroutine(StartAttacking());
                 }
             }
         }
@@ -54,8 +50,7 @@ public class WeaponController : NetworkBehaviour {
     // Tell the server the player wants to hit
     [Command]
     private void CmdHit() {
-        RangedWeapon rangedWeapon = weapons[holdingWeapon].GetComponent<RangedWeapon>();
-        if (rangedWeapon != null && rangedWeapon.currentClip > 0 && !rangedWeapon.isReloading) {
+        if (weapons[holdingWeapon].TryGetComponent(out RangedWeapon rangedWeapon) && rangedWeapon.currentClip > 0 && !rangedWeapon.isReloading) {
             rangedWeapon.currentClip--;
             UIManager.Instance.TargetUpdateAmmoUI(GetComponent<NetworkIdentity>().connectionToClient, rangedWeapon.currentClip, rangedWeapon.currentAmmo);
             weapons[holdingWeapon].GetComponent<Weapon>().Attack();
@@ -63,6 +58,8 @@ public class WeaponController : NetworkBehaviour {
             if (rangedWeapon.currentClip == 0) {
                 StartCoroutine(weapons[holdingWeapon].GetComponent<RangedWeapon>().Reload());
             }
+        } else {
+            weapons[holdingWeapon].GetComponent<Weapon>().Attack();
         }
     }
 
@@ -98,8 +95,10 @@ public class WeaponController : NetworkBehaviour {
         weapons[holdingWeapon].SetActive(true);
     }
 
-    // Cooldown before shooting again
-    IEnumerator StartCooldown() {
+    // Cooldown before attacking again
+    IEnumerator StartAttacking() {
+        canAttack = false;
+        CmdHit();
         yield return new WaitForSeconds(weapons[holdingWeapon].GetComponent<Weapon>().attackCooldown);
         canAttack = true;
     }
